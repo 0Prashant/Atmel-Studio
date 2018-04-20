@@ -1,0 +1,12 @@
+﻿Build started.
+Project "stepper.cproj" (Compile target(s)):
+Target "Compile" in file "C:\Program Files (x86)\Atmel\Studio\7.0\Vs\Compiler.targets" from project "C:\Users\Sushma\Documents\Atmel Studio\7.0\stepper\stepper\stepper.cproj" (entry point):
+	Task "RunCompilerTask"
+		Shell Utils Path C:\Program Files (x86)\Atmel\Studio\7.0\shellUtils
+		C:\Program Files (x86)\Atmel\Studio\7.0\shellUtils\make.exe "main.o" 
+		make: 'main.o' is up to date.
+	Done executing task "RunCompilerTask".
+Done building target "Compile" in project "stepper.cproj".
+Done building project "stepper.cproj".
+
+Build succeeded.

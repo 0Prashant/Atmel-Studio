@@ -1,0 +1,12 @@
+﻿Build started.
+Project "ds1307.cproj" (Compile target(s)):
+Target "Compile" in file "C:\Program Files (x86)\Atmel\Studio\7.0\Vs\Compiler.targets" from project "c:\users\prashant\Documents\Atmel Studio\7.0\ds1307\ds1307\ds1307.cproj" (entry point):
+	Task "RunCompilerTask"
+		Shell Utils Path C:\Program Files (x86)\Atmel\Studio\7.0\shellUtils
+		C:\Program Files (x86)\Atmel\Studio\7.0\shellUtils\make.exe "main.o" 
+		make: 'main.o' is up to date.
+	Done executing task "RunCompilerTask".
+Done building target "Compile" in project "ds1307.cproj".
+Done building project "ds1307.cproj".
+
+Build succeeded.

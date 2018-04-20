@@ -1,0 +1,184 @@
+
+stepperdrive.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000000b8  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  0000010c  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  0000010c  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000013c  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000028  00000000  00000000  00000178  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000168  00000000  00000000  000001a0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000000fc  00000000  00000000  00000308  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   000001a7  00000000  00000000  00000404  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000048  00000000  00000000  000005ac  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    000001c5  00000000  00000000  000005f4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00000049  00000000  00000000  000007b9  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000018  00000000  00000000  00000802  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	12 c0       	rjmp	.+36     	; 0x26 <__ctors_end>
+   2:	19 c0       	rjmp	.+50     	; 0x36 <__bad_interrupt>
+   4:	18 c0       	rjmp	.+48     	; 0x36 <__bad_interrupt>
+   6:	17 c0       	rjmp	.+46     	; 0x36 <__bad_interrupt>
+   8:	16 c0       	rjmp	.+44     	; 0x36 <__bad_interrupt>
+   a:	15 c0       	rjmp	.+42     	; 0x36 <__bad_interrupt>
+   c:	3d c0       	rjmp	.+122    	; 0x88 <__vector_6>
+   e:	13 c0       	rjmp	.+38     	; 0x36 <__bad_interrupt>
+  10:	12 c0       	rjmp	.+36     	; 0x36 <__bad_interrupt>
+  12:	11 c0       	rjmp	.+34     	; 0x36 <__bad_interrupt>
+  14:	10 c0       	rjmp	.+32     	; 0x36 <__bad_interrupt>
+  16:	0f c0       	rjmp	.+30     	; 0x36 <__bad_interrupt>
+  18:	0e c0       	rjmp	.+28     	; 0x36 <__bad_interrupt>
+  1a:	0d c0       	rjmp	.+26     	; 0x36 <__bad_interrupt>
+  1c:	0c c0       	rjmp	.+24     	; 0x36 <__bad_interrupt>
+  1e:	0b c0       	rjmp	.+22     	; 0x36 <__bad_interrupt>
+  20:	0a c0       	rjmp	.+20     	; 0x36 <__bad_interrupt>
+  22:	09 c0       	rjmp	.+18     	; 0x36 <__bad_interrupt>
+  24:	08 c0       	rjmp	.+16     	; 0x36 <__bad_interrupt>
+
+00000026 <__ctors_end>:
+  26:	11 24       	eor	r1, r1
+  28:	1f be       	out	0x3f, r1	; 63
+  2a:	cf e5       	ldi	r28, 0x5F	; 95
+  2c:	d4 e0       	ldi	r29, 0x04	; 4
+  2e:	de bf       	out	0x3e, r29	; 62
+  30:	cd bf       	out	0x3d, r28	; 61
+  32:	02 d0       	rcall	.+4      	; 0x38 <main>
+  34:	3f c0       	rjmp	.+126    	; 0xb4 <_exit>
+
+00000036 <__bad_interrupt>:
+  36:	e4 cf       	rjmp	.-56     	; 0x0 <__vectors>
+
+00000038 <main>:
+
+
+int main(void)
+{
+    /* Replace with your application code */
+    OUTPUT(motorx_Direction);
+  38:	a5 9a       	sbi	0x14, 5	; 20
+    OUTPUT(motorx_Step);
+  3a:	a4 9a       	sbi	0x14, 4	; 20
+    OUTPUT(motory_Direction);
+  3c:	a3 9a       	sbi	0x14, 3	; 20
+    OUTPUT(motory_Step);
+  3e:	a2 9a       	sbi	0x14, 2	; 20
+   
+ 
+    
+    TCCR1B |= (1<<WGM12) | (1<<CS12) | (1<<CS10);  // 1024 prescale and CTC mode
+  40:	8e b5       	in	r24, 0x2e	; 46
+  42:	8d 60       	ori	r24, 0x0D	; 13
+  44:	8e bd       	out	0x2e, r24	; 46
+    TIMSK  |= (1<<OCIE1A);                         // Compare interrupt enable
+  46:	89 b7       	in	r24, 0x39	; 57
+  48:	80 61       	ori	r24, 0x10	; 16
+  4a:	89 bf       	out	0x39, r24	; 57
+    OCR1A   = (15624*sampTime);		           // 15624 -> 1 sec
+  4c:	87 e0       	ldi	r24, 0x07	; 7
+  4e:	90 e0       	ldi	r25, 0x00	; 0
+  50:	9b bd       	out	0x2b, r25	; 43
+  52:	8a bd       	out	0x2a, r24	; 42
+   sei();
+  54:	78 94       	sei
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  56:	2a ea       	ldi	r18, 0xAA	; 170
+  58:	36 ee       	ldi	r19, 0xE6	; 230
+  5a:	86 e9       	ldi	r24, 0x96	; 150
+  5c:	91 e0       	ldi	r25, 0x01	; 1
+  5e:	21 50       	subi	r18, 0x01	; 1
+  60:	30 40       	sbci	r19, 0x00	; 0
+  62:	80 40       	sbci	r24, 0x00	; 0
+  64:	90 40       	sbci	r25, 0x00	; 0
+  66:	d9 f7       	brne	.-10     	; 0x5e <__SREG__+0x1f>
+  68:	00 00       	nop
+    while (1)
+    {
+    _delay_ms(10000);
+	SET(motorx_Direction);
+  6a:	ad 9a       	sbi	0x15, 5	; 21
+	SET(motory_Direction);
+  6c:	ab 9a       	sbi	0x15, 3	; 21
+  6e:	2a ea       	ldi	r18, 0xAA	; 170
+  70:	36 ee       	ldi	r19, 0xE6	; 230
+  72:	86 e9       	ldi	r24, 0x96	; 150
+  74:	91 e0       	ldi	r25, 0x01	; 1
+  76:	21 50       	subi	r18, 0x01	; 1
+  78:	30 40       	sbci	r19, 0x00	; 0
+  7a:	80 40       	sbci	r24, 0x00	; 0
+  7c:	90 40       	sbci	r25, 0x00	; 0
+  7e:	d9 f7       	brne	.-10     	; 0x76 <__SREG__+0x37>
+  80:	00 00       	nop
+	_delay_ms(10000);
+	CLEAR(motorx_Direction);
+  82:	ad 98       	cbi	0x15, 5	; 21
+	CLEAR(motory_Direction);
+  84:	ab 98       	cbi	0x15, 3	; 21
+#define motory_Step	  C,2
+#define motory_Direction  C,3
+
+
+
+int main(void)
+  86:	e7 cf       	rjmp	.-50     	; 0x56 <__SREG__+0x17>
+
+00000088 <__vector_6>:
+	CLEAR(motorx_Direction);
+	CLEAR(motory_Direction);
+    }
+}
+
+ISR(TIMER1_COMPA_vect){
+  88:	1f 92       	push	r1
+  8a:	0f 92       	push	r0
+  8c:	0f b6       	in	r0, 0x3f	; 63
+  8e:	0f 92       	push	r0
+  90:	11 24       	eor	r1, r1
+  92:	8f 93       	push	r24
+  94:	9f 93       	push	r25
+	
+     TOGGLE(motorx_Step);
+  96:	95 b3       	in	r25, 0x15	; 21
+  98:	80 e1       	ldi	r24, 0x10	; 16
+  9a:	89 27       	eor	r24, r25
+  9c:	85 bb       	out	0x15, r24	; 21
+     TOGGLE(motory_Step);
+  9e:	95 b3       	in	r25, 0x15	; 21
+  a0:	84 e0       	ldi	r24, 0x04	; 4
+  a2:	89 27       	eor	r24, r25
+  a4:	85 bb       	out	0x15, r24	; 21
+  				
+}
+  a6:	9f 91       	pop	r25
+  a8:	8f 91       	pop	r24
+  aa:	0f 90       	pop	r0
+  ac:	0f be       	out	0x3f, r0	; 63
+  ae:	0f 90       	pop	r0
+  b0:	1f 90       	pop	r1
+  b2:	18 95       	reti
+
+000000b4 <_exit>:
+  b4:	f8 94       	cli
+
+000000b6 <__stop_program>:
+  b6:	ff cf       	rjmp	.-2      	; 0xb6 <__stop_program>
